@@ -1,25 +1,33 @@
 const CustomError = require("../extensions/custom-error");
 
 const chainMaker = {
-  mas: [],
+  chainsArray: [],
   getLength() {
-    return this.mas.length;
+    return this.chainsArray.length;
   },
   addLink(value = '') {
-    this.mas.push(`( ${value} )`);
+    this.chainsArray.push(`( ${value} )`);
     return this;
+    this.chainsArray = [];
   },
   removeLink(idx) {
-    if (!Number.isInteger(idx) || !this.mas[idx - 1]) throw new Error('error');
-    this.mas.splice(idx - 1, 1);
+    if (!Number.isInteger(idx) || !this.chainsArray[idx - 1]){
+      this.chainsArray = [];
+      throw new Error('error');
+    } 
+    this.chainsArray.splice(idx - 1, 1);
     return this;
+    
+    
   },
   reverseChain() {
-    this.mas.reverse();
+    this.chainsArray.reverse();
     return this;
   },
   finishChain() {
-    return this.mas.join('~~');
+    let result = this.chainsArray.join('~~');
+    this.chainsArray = [];
+    return result;
   },
 };
 
