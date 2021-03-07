@@ -1,33 +1,29 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function repeater(str, options) {
-
-  if (options.repeatTimes === undefined && options.additionRepeatTimes === undefined) {
-    return "TESTstrADD!";
-  }
-
-  options = {
-    repeatTimes: options.repeatTimes || 0,
-    separator: options.separator || "+",
-    addition: options.addition + "" || "",
-    additionRepeatTimes: options.additionRepeatTimes || 0,
-    additionSeparator: options.additionSeparator || "|",
-  }
-  
-  let result = "";
-
-  for (let i = 0; i < options.repeatTimes; i++) {
-    result += str;
-    for (let j = 0;  j < options.additionRepeatTimes; j++) {
-      result += options.addition + (j < options.additionRepeatTimes - 1 ? options.additionSeparator : "");
+    let separator = options.separator ? options.separator : '+';
+    let additionSeparator = options.additionSeparator ? options.additionSeparator : '|';
+    let addition = '';
+    if (options.hasOwnProperty('addition')) {
+        addition = options.addition + '';
     }
-    result += (i < options.repeatTimes - 1) ? options.separator : "";
-  }
+    let repeatTimes = options.repeatTimes ? options.repeatTimes : 0;
+    let additionRepeatTimes = options.additionRepeatTimes ? options.additionRepeatTimes : 0;
+    str = str + '';
+    strWithSeparator = str + separator;
+    let additionStr = '';
 
-  return result;
+    if (additionRepeatTimes && addition) {
+        additionStr = new Array(additionRepeatTimes).join(addition + additionSeparator) + addition;
+    } else if (!additionRepeatTimes && addition) {
+        additionStr = addition;
+    }
+
+    if (!repeatTimes) {
+        return str + additionStr;
+    } else if (additionStr) {
+        return new Array(repeatTimes).join(str + additionStr + separator) + (str + additionStr);
+    } else if (!additionStr) {
+        return new Array(repeatTimes).join(strWithSeparator) + str;
+    }
 };
-  
-
-
-
-
